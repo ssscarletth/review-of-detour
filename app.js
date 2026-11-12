@@ -4,6 +4,8 @@
   const slides = [...document.querySelectorAll('.slide')];
   const stage = $('stage');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = matchMedia('(max-width: 699px), (pointer: coarse) and (max-height: 500px)');
+  const story = document.querySelector('.story');
   const names = ['COVER', '01 · RECALCULATING', '02 · FAMILIAR CORNER', '03 · TURN LEFT', '04 · PLOT TWIST', '05 · SCENIC ROUTE', '06 · YOUR MAP', '07 · ARRIVED', 'THE END'];
   let index = 0;
   let transitionUntil = 0, numberFrame = 0, toastTimer = 0, pointer = null, wheelTotal = 0, wheelTime = 0, wheelConsumed = false;
@@ -58,6 +60,7 @@
   }
   stage.addEventListener('pointerup', e => finishPointer(e));
   stage.addEventListener('pointercancel', e => finishPointer(e, true));
+  stage.addEventListener('lostpointercapture', e => finishPointer(e, true));
   stage.addEventListener('wheel', e => {
     e.preventDefault();
     const t = performance.now();
@@ -93,14 +96,29 @@
   });
   document.addEventListener('fullscreenchange',()=> $('fullscreen').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen'));
   function fitPhone() {
+    if (mobile.matches) {
+      story.style.removeProperty('--device-scale');
+      // Fit only the chapter when browser chrome or rotation reduces the space.
+      // Header and navigation remain at their normal, touch-friendly sizes.
+      slides.forEach(slide => {
+        const content = slide.querySelector('.slide-inner');
+        const style = getComputedStyle(slide);
+        const available = slide.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+        content.style.setProperty('--content-scale', Math.min(1, Math.max(0, available) / content.scrollHeight));
+      });
+      return;
+    }
     const view = window.visualViewport;
     const width = view ? view.width : innerWidth;
     const height = view ? view.height : innerHeight;
     const scale = Math.min(1, (width - 16) / 414, (height - 16) / 886);
-    document.querySelector('.story').style.setProperty('--device-scale', scale);
+    story.style.setProperty('--device-scale', scale);
   }
+  mobile.addEventListener('change', fitPhone);
   addEventListener('resize', fitPhone);
   window.visualViewport?.addEventListener('resize', fitPhone);
+  new ResizeObserver(fitPhone).observe(story);
+  document.fonts.ready.then(fitPhone);
   fitPhone();
   go(0,true);
 })();

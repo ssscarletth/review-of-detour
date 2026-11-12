@@ -55,3 +55,53 @@ h2{font-size:33px}.big-number>span:first-child{font-size:153px}.intersection h2{
 .intersection .aside{margin-top:15px}
 .mileage-number{margin-top:44px}
 .arrival-number{margin-top:34px}
+
+/* Real phones use the viewport; the simulated device stays on desktop. */
+@media (max-width:699px), (pointer:coarse) and (max-height:500px) {
+  body { background:var(--paper); overscroll-behavior:none; }
+  .story, .story:fullscreen {
+    --space:clamp(20px,6.5vw,28px);
+    box-sizing:border-box;
+    width:100%; max-width:none;
+    height:100vh; height:100dvh;
+    border:0; border-radius:0; box-shadow:none; transform:none;
+  }
+  .story:before, .story:after { display:none; }
+  .chrome, .story:fullscreen .chrome {
+    padding:calc(env(safe-area-inset-top,0px) + 8px)
+      max(20px,env(safe-area-inset-right,0px)) 0
+      max(20px,env(safe-area-inset-left,0px));
+  }
+  .icon-button { width:44px; height:44px; }
+  .slide, .story:fullscreen .slide {
+    padding:calc(env(safe-area-inset-top,0px) + 76px)
+      env(safe-area-inset-right,0px)
+      calc(env(safe-area-inset-bottom,0px) + 62px)
+      env(safe-area-inset-left,0px);
+  }
+  .slide-inner {
+    height:auto; max-height:none; flex-shrink:0; margin:0;
+    transform:scale(var(--content-scale,1)); transform-origin:center;
+  }
+  .slide-inner > * { flex-shrink:0; }
+  .bottom-bar {
+    height:calc(54px + env(safe-area-inset-bottom,0px));
+    padding:0 max(14px,env(safe-area-inset-right,0px))
+      env(safe-area-inset-bottom,0px) max(14px,env(safe-area-inset-left,0px));
+  }
+  .nav-button { width:44px; height:44px; }
+  .toast { bottom:calc(64px + env(safe-area-inset-bottom,0px)); }
+  .desktop-note { display:none; }
+}
+
+/* Tighten spacing first, before fitting a chapter on a shorter phone screen. */
+@media (max-width:699px) and (max-height:800px), (pointer:coarse) and (max-height:500px) {
+  .kicker { margin-bottom:20px; }
+  .cover-photo { height:155px; min-height:155px; margin-top:26px; }
+  .cover-bottom { margin-top:18px; }
+  .count-photo, .miles-photo, .arrival-photo { height:115px; min-height:115px; margin-top:24px; }
+  .twist-photo, .regular-photo, .end-photo { height:140px; min-height:140px; margin-top:24px; }
+  .intersection-photo { height:130px; min-height:130px; }
+  .left-turn .body-copy { margin-top:20px; }
+  .mileage-number, .arrival-number { margin-top:24px; }
+}

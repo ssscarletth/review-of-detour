@@ -12,7 +12,9 @@ Serve this folder with any static web server, for example `python3 -m http.serve
 
 - Manual swipe-up navigation, with one chapter per gesture; no autoplay.
 - Animated numbers and reduced-motion support.
-- iPhone 17-proportioned preview, centered layouts, and a single next arrow.
+- Desktop: iPhone-proportioned preview with a device frame.
+- Mobile: edge-to-edge dynamic viewport, safe-area spacing, and touch navigation.
+- Chapters fit the available height when browser controls or rotation reduce space; navigation remains at least 44 × 44 CSS pixels.
 - Locally bundled Noto Sans and Source Serif 4 fonts.
 
 ## Files
